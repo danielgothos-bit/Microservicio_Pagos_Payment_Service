@@ -1,0 +1,45 @@
+services:
+  payment_service:
+    build: .
+    container_name: payment_service
+    ports:
+      - "8001:8000"
+    environment:
+      DJANGO_SETTINGS_MODULE: payment_service.settings
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/payment_db
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+
+  payment_worker:
+    build: .
+    container_name: payment_worker
+    command: celery -A pagos.events worker --loglevel=info
+    environment:
+      DJANGO_SETTINGS_MODULE: payment_service.settings
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:16
+    container_name: payment_db
+    environment:
+      POSTGRES_DB: payment_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: payment_redis
+    ports:
+      - "6380:6379"
+
+volumes:
+  postgres_data:

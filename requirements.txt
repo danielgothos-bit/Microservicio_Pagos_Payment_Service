@@ -1,0 +1,6 @@
+Django>=5.1
+djangorestframework
+psycopg2-binary
+celery
+redis
+gunicorn
