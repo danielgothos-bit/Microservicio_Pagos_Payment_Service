@@ -18,6 +18,7 @@ services:
     command: celery -A pagos.events worker --loglevel=info
     environment:
       DJANGO_SETTINGS_MODULE: payment_service.settings
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/payment_db
       REDIS_URL: redis://redis:6379/0
     depends_on:
       - postgres

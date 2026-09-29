@@ -77,13 +77,21 @@ Publica:
 docker compose up --build
 ```
 
-En otro terminal:
-
-```bash
-docker compose exec payment_service python manage.py migrate
-```
+Las migraciones se aplican automáticamente al arrancar (`start.sh`).
 
 El servicio queda disponible en el puerto **8001** (para no chocar con Peritaje, que usa el 8000).
+
+## Despliegue en Render
+
+El archivo `render.yaml` crea en Render:
+- `payment-service`: el microservicio (Docker, plan gratis, health check en `/health`);
+- `payment-db`: PostgreSQL `payment_db`;
+- `payment-redis`: Redis (Key Value) para los eventos de Celery.
+
+Pasos: en Render → **New → Blueprint** → conectar este repositorio → **Deploy Blueprint**.
+
+En el plan gratis el worker de Celery corre dentro del mismo contenedor web (`RUN_WORKER_IN_WEB=1`).
+El servicio se "duerme" tras 15 minutos sin uso y tarda ~1 minuto en despertar.
 
 ## Ejecución sin Docker (desarrollo local)
 

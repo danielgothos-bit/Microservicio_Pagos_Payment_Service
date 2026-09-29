@@ -1,21 +1,25 @@
 import os
 from pathlib import Path
 
+import dj_database_url
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("JWT_SECRET", "payment-service-development-key")
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "1") == "1"
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.auth",
+    "django.contrib.staticfiles",
     "rest_framework",
     "pagos",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = "payment_service.urls"
@@ -44,6 +48,9 @@ if os.getenv("USE_SQLITE") == "1":
             "NAME": BASE_DIR / "payment_db.sqlite3",
         }
     }
+elif os.getenv("DATABASE_URL"):
+    # Render (y docker-compose) entregan la conexión en DATABASE_URL.
+    DATABASES = {"default": dj_database_url.config(conn_max_age=600)}
 else:
     DATABASES = {
         "default": {
@@ -60,6 +67,12 @@ LANGUAGE_CODE = "es-co"
 TIME_ZONE = "America/Bogota"
 USE_I18N = True
 USE_TZ = True
+
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STORAGES = {
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+}
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
