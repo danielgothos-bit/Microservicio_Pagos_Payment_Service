@@ -5,9 +5,11 @@ services:
     ports:
       - "8001:8000"
     environment:
-      DJANGO_SETTINGS_MODULE: payment_service.settings
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/payment_db
       REDIS_URL: redis://redis:6379/0
+    env_file:
+      - path: .env
+        required: false
     depends_on:
       - postgres
       - redis
@@ -15,11 +17,13 @@ services:
   payment_worker:
     build: .
     container_name: payment_worker
-    command: celery -A pagos.events worker --loglevel=info
+    command: celery -A comun.celery_app worker -Q payment --loglevel=info
     environment:
-      DJANGO_SETTINGS_MODULE: payment_service.settings
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/payment_db
       REDIS_URL: redis://redis:6379/0
+    env_file:
+      - path: .env
+        required: false
     depends_on:
       - postgres
       - redis

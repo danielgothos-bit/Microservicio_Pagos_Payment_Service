@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.staticfiles",
     "rest_framework",
+    "comun",
     "pagos",
 ]
 
@@ -48,20 +49,17 @@ if os.getenv("USE_SQLITE") == "1":
             "NAME": BASE_DIR / "payment_db.sqlite3",
         }
     }
-elif os.getenv("DATABASE_URL"):
-    # Render (y docker-compose) entregan la conexión en DATABASE_URL.
-    DATABASES = {"default": dj_database_url.config(conn_max_age=600)}
 else:
+    # Render (y docker-compose) entregan la conexión en DATABASE_URL.
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("DB_NAME", "payment_db"),
-            "USER": os.getenv("DB_USER", "postgres"),
-            "PASSWORD": os.getenv("DB_PASSWORD", "postgres"),
-            "HOST": os.getenv("DB_HOST", "postgres"),
-            "PORT": os.getenv("DB_PORT", "5432"),
-        }
+        "default": dj_database_url.config(
+            default="postgresql://postgres:postgres@postgres:5432/payment_db",
+            conn_max_age=600,
+        )
     }
+    # DB_NAME permite usar una base propia dentro de un servidor PostgreSQL compartido.
+    if os.getenv("DB_NAME"):
+        DATABASES["default"]["NAME"] = os.getenv("DB_NAME")
 
 LANGUAGE_CODE = "es-co"
 TIME_ZONE = "America/Bogota"
@@ -80,4 +78,16 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [],
     "DEFAULT_PERMISSION_CLASSES": [],
     "UNAUTHENTICATED_USER": None,
+    "EXCEPTION_HANDLER": "comun.errores.manejar_error",
+}
+
+# Módulo con los manejadores de eventos que consume este microservicio.
+EVENT_HANDLERS_MODULE = "pagos.handlers"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {"json": {"()": "comun.logs.JsonFormatter"}},
+    "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "json"}},
+    "root": {"handlers": ["console"], "level": os.getenv("LOG_LEVEL", "INFO")},
 }

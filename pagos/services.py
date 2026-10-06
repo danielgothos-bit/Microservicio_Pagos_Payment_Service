@@ -2,22 +2,28 @@ from decimal import Decimal
 
 from django.utils import timezone
 
+from comun.eventos import publicar
+
 from .models import PremiumPayment, ClaimPayout, PAGADO, FALLIDO
 from .gateways import get_gateway
-from .events import publicar_payment_completed, publicar_payment_failed
 
 
-def _aplicar_resultado(pago, exito, tipo, referencia_id):
-    pk = str(pago.pk)
+def _aplicar_resultado(pago, exito, tipo, referencia, extra=None):
+    pago.status = PAGADO if exito else FALLIDO
     if exito:
-        pago.status = PAGADO
         pago.paid_at = timezone.now()
-        pago.save()
-        publicar_payment_completed.delay(pk, tipo, str(referencia_id))
-    else:
-        pago.status = FALLIDO
-        pago.save()
-        publicar_payment_failed.delay(pk, tipo, str(referencia_id))
+    pago.save()
+
+    publicar("payment.completed" if exito else "payment.failed", {
+        "payment_id": pago.pk,
+        "tipo": tipo,  # "prima" | "indemnizacion"
+        "referencia_id": referencia[1],  # id_poliza o id_siniestro
+        referencia[0]: referencia[1],
+        "amount": pago.amount,
+        "method": pago.method,
+        "paid_at": pago.paid_at,
+        **(extra or {}),
+    })
     return pago
 
 
@@ -25,10 +31,10 @@ def registrar_cobro_prima(data):
     """Crea el cobro de prima y lo procesa en la pasarela."""
     pago = PremiumPayment.objects.create(**data)
     exito, _, _ = get_gateway().cobrar(str(pago.id_pago), pago.amount, pago.method)
-    return _aplicar_resultado(pago, exito, "prima", pago.id_poliza)
+    return _aplicar_resultado(pago, exito, "prima", ("id_poliza", pago.id_poliza))
 
 
-def ejecutar_indemnizacion(id_siniestro, amount, method="transferencia"):
+def ejecutar_indemnizacion(id_siniestro, amount, method="transferencia", id_asegurado=None):
     """
     Ejecuta el pago de indemnización de un siniestro aprobado.
     Es idempotente: si el siniestro ya tiene un pago exitoso, no se paga dos veces.
@@ -44,4 +50,5 @@ def ejecutar_indemnizacion(id_siniestro, amount, method="transferencia"):
 
     payout = ClaimPayout.objects.create(id_siniestro=id_siniestro, amount=amount, method=method)
     exito, _, _ = get_gateway().transferir(str(payout.id_payout), payout.amount, payout.method)
-    return _aplicar_resultado(payout, exito, "indemnizacion", payout.id_siniestro), False
+    extra = {"id_asegurado": id_asegurado} if id_asegurado else None
+    return _aplicar_resultado(payout, exito, "indemnizacion", ("id_siniestro", payout.id_siniestro), extra), False

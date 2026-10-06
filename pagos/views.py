@@ -1,4 +1,3 @@
-from django.db import connection
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,24 +7,11 @@ from .serializers import PremiumPaymentSerializer, ClaimPayoutSerializer
 from .services import registrar_cobro_prima, ejecutar_indemnizacion
 
 
-@api_view(["GET"])
-def health(request):
-    try:
-        connection.ensure_connection()
-        db = "ok"
-    except Exception:
-        db = "error"
-
-    codigo = status.HTTP_200_OK if db == "ok" else status.HTTP_503_SERVICE_UNAVAILABLE
-    return Response({"service": "payment_service", "status": db, "database": db}, status=codigo)
-
-
 @api_view(["POST"])
 def primas(request):
     serializer = PremiumPaymentSerializer(data=request.data)
 
-    if not serializer.is_valid():
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer.is_valid(raise_exception=True)
 
     pago = registrar_cobro_prima(serializer.validated_data)
 
@@ -45,8 +31,7 @@ def primas_por_poliza(request, id):
 def indemnizaciones(request):
     serializer = ClaimPayoutSerializer(data=request.data)
 
-    if not serializer.is_valid():
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer.is_valid(raise_exception=True)
 
     data = serializer.validated_data
     payout, ya_pagado = ejecutar_indemnizacion(

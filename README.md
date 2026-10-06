@@ -1,114 +1,71 @@
 # Microservicio de Pagos — Payment Service
 
-Implementación del microservicio de Pagos definido en la guía de InsureFlow.
+Microservicio de InsureFlow definido en la sección 4.5 del documento de arquitectura.
 
 ## Responsabilidad
 
-Gestionar:
-- el cobro periódico de primas de las pólizas;
-- el pago de indemnizaciones de siniestros ya aprobados;
-- la integración con pasarelas de pago y transferencia bancaria (adaptador en `pagos/gateways.py`).
+Procesar el cobro de primas y el pago de indemnizaciones aprobadas, integrándose con pasarelas de pago (adaptador en `pagos/gateways.py`).
 
 ## Tecnología
 
-- Python
-- Django REST Framework
-- PostgreSQL (`payment_db`)
-- Celery
-- Redis
-- Docker
+Python · Django REST Framework · PostgreSQL (`payment_db`) · Celery + Redis · Docker
 
-## Modelo de datos (3FN)
+## Modelo de datos (3FN, IDs UUID)
 
-`premium_payments`: id_pago (PK, UUID), id_poliza (FK-ext, UUID), amount, due_date, paid_at, method, status
+`premium_payments` y `claim_payouts` (amount > 0, method y status restringidos).
 
-`claim_payouts`: id_payout (PK, UUID), id_siniestro (FK-ext, UUID), amount, paid_at, method, status
+## Endpoints
 
-Restricciones: `amount > 0`, `method IN ('tarjeta','pse','transferencia')`,
-`status IN ('pendiente','pagado','fallido')`.
-
-Índices: `idx_premium_payments_poliza`, `idx_premium_payments_due_date`, `idx_claim_payouts_siniestro`.
-
-## Endpoints definidos
-
-POST /api/v1/pagos/primas
-GET  /api/v1/pagos/primas/poliza/{id}
-POST /api/v1/pagos/indemnizaciones
-GET  /api/v1/pagos/indemnizaciones/siniestro/{id}
-GET  /health
-
-Ejemplo — registrar cobro de prima:
-
-```json
-POST /api/v1/pagos/primas
-{
-  "id_poliza": "8f1c2e4a-1b2c-4d5e-9f00-123456789abc",
-  "amount": "150000.00",
-  "due_date": "2026-10-01",
-  "method": "pse"
-}
 ```
-
-Ejemplo — ejecutar pago de indemnización:
-
-```json
-POST /api/v1/pagos/indemnizaciones
-{
-  "id_siniestro": "3a7d9b10-2c4e-4f6a-8b1c-abcdef012345",
-  "amount": "5000000.00",
-  "method": "transferencia"
-}
+POST /api/v1/pagos/primas — registrar cobro de prima
+GET  /api/v1/pagos/primas/poliza/{id} — historial de pagos de una póliza
+POST /api/v1/pagos/indemnizaciones — ejecutar pago de indemnización (409 si ya se pagó)
+GET  /api/v1/pagos/indemnizaciones/siniestro/{id} — pagos de un siniestro
+GET  /health — estado del servicio y de su base de datos
+POST /api/v1/eventos — endpoint interno donde otros microservicios entregan eventos
 ```
-
-Si el siniestro ya tiene una indemnización pagada responde `409 ALREADY_PAID` (no se paga dos veces).
 
 ## Eventos
-
-Consume:
-- claim.approved (tarea `pagos.events.consumir_claim_approved`, argumentos: `claim_id`, `amount`)
 
 Publica:
 - payment.completed
 - payment.failed
 
-## Ejecución
+Consume:
+- claim.approved
+
+Los eventos se encolan con Celery/Redis y se entregan por HTTP al endpoint `/api/v1/eventos` de cada
+suscriptor, con reintentos y backoff exponencial (módulo `comun/eventos.py`). Cada evento se procesa una
+sola vez (idempotencia por `event_id`).
+
+## Variables de entorno
+
+- `DATABASE_URL`, `REDIS_URL`: base de datos y Redis propios
+- `INTERNAL_TOKEN`: token compartido por todos los microservicios para los eventos
+- `RUN_WORKER_IN_WEB=1`: corre el worker de Celery dentro del mismo contenedor (Render gratis)
+- `SYNC_TIMEOUT`: timeout de las llamadas REST síncronas (3 s por defecto)
+- `CLAIMS_SERVICE_URL`: microservicio de Siniestros
+- `DOCUMENT_SERVICE_URL`: microservicio de Documentación
+- `NOTIFICATION_SERVICE_URL`: microservicio de Notificaciones
+- `ANALYTICS_SERVICE_URL`: microservicio de Analítica
+
+Si una URL no está configurada, el servicio funciona en modo aislado (omite esa validación o ese evento).
+
+## Ejecución local
 
 ```bash
 docker compose up --build
 ```
 
-Las migraciones se aplican automáticamente al arrancar (`start.sh`).
-
-El servicio queda disponible en el puerto **8001** (para no chocar con Peritaje, que usa el 8000).
-
-## Despliegue en Render
-
-El archivo `render.yaml` crea en Render:
-- `payment-service`: el microservicio (Docker, plan gratis, health check en `/health`);
-- `payment-db`: PostgreSQL `payment_db`;
-- `payment-redis`: Redis (Key Value) para los eventos de Celery.
-
-Pasos: en Render → **New → Blueprint** → conectar este repositorio → **Deploy Blueprint**.
-
-En el plan gratis el worker de Celery corre dentro del mismo contenedor web (`RUN_WORKER_IN_WEB=1`).
-El servicio se "duerme" tras 15 minutos sin uso y tarda ~1 minuto en despertar.
-
-## Ejecución sin Docker (desarrollo local)
-
-```bash
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-set USE_SQLITE=1
-set CELERY_EAGER=1
-python manage.py migrate
-python manage.py runserver 8001
-```
+El servicio queda en http://localhost:8001 y las migraciones se aplican solas al arrancar.
 
 Pruebas:
 
 ```bash
-python manage.py test pagos
+docker compose exec payment_service python manage.py test pagos
 ```
 
-Variable `PAYMENT_GATEWAY_FAIL=1`: fuerza a la pasarela simulada a rechazar los pagos (para probar `payment.failed`).
+## Despliegue en Render
+
+En Render: **New → Blueprint** → conectar este repositorio → **Deploy Blueprint**.
+El `render.yaml` crea el servicio web, su PostgreSQL y su Redis (plan gratis).

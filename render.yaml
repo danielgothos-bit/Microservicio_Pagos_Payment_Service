@@ -16,10 +16,28 @@ services:
           property: connectionString
       - key: JWT_SECRET
         generateValue: true
+      # Mismo valor en TODOS los microservicios (autentica la entrega de eventos).
+      - key: INTERNAL_TOKEN
+        sync: false
       - key: DEBUG
         value: "0"
       - key: RUN_WORKER_IN_WEB
         value: "1"
+      # Los servicios gratis tardan ~1 minuto en despertar.
+      - key: SYNC_TIMEOUT
+        value: "60"
+      # URL pública del microservicio de Siniestros (ej: https://claims-service-xxxx.onrender.com)
+      - key: CLAIMS_SERVICE_URL
+        sync: false
+      # URL pública del microservicio de Documentación (ej: https://document-service-xxxx.onrender.com)
+      - key: DOCUMENT_SERVICE_URL
+        sync: false
+      # URL pública del microservicio de Notificaciones (ej: https://notification-service-xxxx.onrender.com)
+      - key: NOTIFICATION_SERVICE_URL
+        sync: false
+      # URL pública del microservicio de Analítica (ej: https://analytics-service-xxxx.onrender.com)
+      - key: ANALYTICS_SERVICE_URL
+        sync: false
 
   - type: keyvalue
     name: payment-redis

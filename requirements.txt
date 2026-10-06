@@ -6,3 +6,4 @@ redis
 gunicorn
 dj-database-url
 whitenoise
+requests
