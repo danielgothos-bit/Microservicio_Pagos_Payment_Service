@@ -25,3 +25,11 @@ class PagosUnitTests(TestCase):
             ejecutar_indemnizacion(uuid.uuid4(), Decimal("0"))
         get_gateway.assert_not_called()
         publicar.assert_not_called()
+
+
+class DemostracionPruebaFallida(TestCase):
+    """Rama de demostración (Momento 3): esta prueba falla a propósito para mostrar que el pipeline
+    se detiene en rojo y deploy.yml NO despliega. No se integra a main."""
+
+    def test_falla_a_proposito(self):
+        self.assertEqual(Decimal("100") + Decimal("100"), Decimal("300"))
