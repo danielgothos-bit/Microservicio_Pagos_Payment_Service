@@ -1,0 +1,45 @@
+EVIDENCIA DE PRUEBAS · Microservicio_Pagos_Payment_Service
+Fecha: 2026-11-17 12:45
+Comando: USE_SQLITE=1 CELERY_EAGER=1 coverage run manage.py test -v 2
+
+Pruebas exigidas (Momento 3): tests/test_unitarias.py (2 unitarias con mocks) y tests/test_integracion.py (1 de integración).
+
+=== Resultado de cada prueba ===
+test_health (pagos.tests.PagosTests.test_health) ... ok
+test_indemnizacion_fallida_publica_payment_failed (pagos.tests.PagosTests.test_indemnizacion_fallida_publica_payment_failed) ... ok
+test_indemnizacion_no_se_paga_dos_veces (pagos.tests.PagosTests.test_indemnizacion_no_se_paga_dos_veces) ... ok
+test_prima_con_metodo_invalido (pagos.tests.PagosTests.test_prima_con_metodo_invalido) ... ok
+test_prima_con_monto_cero (pagos.tests.PagosTests.test_prima_con_monto_cero) ... ok
+test_registrar_prima_y_consultar_historial (pagos.tests.PagosTests.test_registrar_prima_y_consultar_historial) ... ok
+test_registrar_cobro_de_prima_y_consultar_historial (tests.test_integracion.PagosIntegracionTests.test_registrar_cobro_de_prima_y_consultar_historial) ... ok
+test_pasarela_rechaza_y_se_publica_payment_failed (tests.test_unitarias.PagosUnitTests.test_pasarela_rechaza_y_se_publica_payment_failed) ... ok
+test_rechaza_monto_invalido_sin_llamar_a_la_pasarela (tests.test_unitarias.PagosUnitTests.test_rechaza_monto_invalido_sin_llamar_a_la_pasarela) ... ok
+
+Ran 10 tests in 0.120s
+OK
+
+=== Reporte de cobertura (coverage.py) ===
+Name                      Stmts   Miss  Cover   Missing
+-------------------------------------------------------
+comun\celery_app.py           9      0   100%
+comun\clientes.py            66     66     0%   10-101
+comun\errores.py             14      2    86%   20, 24
+comun\eventos.py             40     23    42%   51-69, 75-93
+comun\logs.py                14      1    93%   24
+comun\metricas.py            23      1    96%   44
+comun\models.py               8      0   100%
+comun\servicio.py             2      0   100%
+comun\views.py               42      8    81%   23-24, 34, 45-46, 49-50, 56
+pagos\apps.py                 4      0   100%
+pagos\gateways.py            18      2    89%   15, 19
+pagos\handlers.py             4      0   100%
+pagos\models.py              38      2    95%   58, 85
+pagos\serializers.py         20      1    95%   40
+pagos\services.py            27      0   100%
+pagos\urls.py                 3      0   100%
+pagos\views.py               29      0   100%
+payment_service\urls.py       5      0   100%
+-------------------------------------------------------
+TOTAL                       366    106    71%
+
+3 empty files skipped.

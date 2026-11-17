@@ -1,0 +1,283 @@
+[
+{
+  "model": "pagos.premiumpayment",
+  "pk": "0204c456-abfa-4206-968b-75f3ea54c121",
+  "fields": {
+    "id_poliza": "a5ae718c-79c3-4cec-a7b5-4fa5f03a7742",
+    "amount": "210000.00",
+    "due_date": "2026-11-10",
+    "paid_at": "2026-11-10T19:56:57.125Z",
+    "method": "pse",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "0766b376-1c25-4688-ba5a-9477546a84ac",
+  "fields": {
+    "id_poliza": "b0ab0ed2-6075-48ba-820e-431042ea558c",
+    "amount": "58000.00",
+    "due_date": "2026-11-10",
+    "paid_at": "2026-11-10T19:56:57.348Z",
+    "method": "pse",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "319fe547-0b19-46ce-8543-c2748bdc006c",
+  "fields": {
+    "id_poliza": "3a832b0b-2447-4424-ba12-0810df889ef0",
+    "amount": "73000.00",
+    "due_date": "2026-11-10",
+    "paid_at": "2026-11-10T19:56:57.292Z",
+    "method": "pse",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "43580db7-aa45-47bd-aba8-d4cc2651aee9",
+  "fields": {
+    "id_poliza": "67471254-1f71-4418-9627-5395d1369eb5",
+    "amount": "73000.00",
+    "due_date": "2026-11-17",
+    "paid_at": "2026-11-17T16:57:44.356Z",
+    "method": "pse",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "52edd344-c1db-475e-a9c9-739b7dde5c0c",
+  "fields": {
+    "id_poliza": "313fe9b3-ad9a-4b38-afa9-2e812a649b5f",
+    "amount": "73000.00",
+    "due_date": "2026-11-10",
+    "paid_at": "2026-11-10T19:59:34.850Z",
+    "method": "pse",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "5933afe3-6dbf-468d-80f4-21d7ef4cf76b",
+  "fields": {
+    "id_poliza": "37255788-8e19-4072-a686-6bc117107d5e",
+    "amount": "210000.00",
+    "due_date": "2026-11-10",
+    "paid_at": "2026-11-10T19:59:34.637Z",
+    "method": "pse",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "5b0b46da-ba19-4bd5-a8f4-9d39c19d036a",
+  "fields": {
+    "id_poliza": "adc099d7-c6ff-48fd-a72f-c15d61374784",
+    "amount": "210000.00",
+    "due_date": "2026-11-17",
+    "paid_at": "2026-11-17T16:57:44.143Z",
+    "method": "pse",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "6a4ec7e6-fca1-4af2-b6d9-4763fbcdaf60",
+  "fields": {
+    "id_poliza": "42edbd8c-91b9-4410-9b89-7fb4d6219b08",
+    "amount": "73000.00",
+    "due_date": "2026-11-17",
+    "paid_at": "2026-11-17T17:18:26.295Z",
+    "method": "pse",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "86e4248a-b000-470d-9a81-50893b82a862",
+  "fields": {
+    "id_poliza": "edd8512f-db4e-4df2-94ee-438b1c9a2166",
+    "amount": "73000.00",
+    "due_date": "2026-11-17",
+    "paid_at": "2026-11-17T17:20:44.215Z",
+    "method": "pse",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "8a7e844d-2846-4e6f-8041-23e1710e0ff5",
+  "fields": {
+    "id_poliza": "f74496cc-9959-4b36-a6b8-92e9d969ce3a",
+    "amount": "58000.00",
+    "due_date": "2026-11-10",
+    "paid_at": "2026-11-10T19:59:34.908Z",
+    "method": "pse",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "8c8aa102-ffe5-4220-8d7b-b88441cb53f2",
+  "fields": {
+    "id_poliza": "5f08372e-b05a-45a4-88e7-2dd2e52da833",
+    "amount": "73000.00",
+    "due_date": "2026-11-17",
+    "paid_at": "2026-11-17T17:16:40.860Z",
+    "method": "pse",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "968d3948-137a-48bb-a06c-2830de6ba609",
+  "fields": {
+    "id_poliza": "b675317d-5e7d-47ff-aba7-87c43d62be61",
+    "amount": "100000.00",
+    "due_date": "2026-10-13",
+    "paid_at": "2026-10-13T18:54:23.298Z",
+    "method": "pse",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "9b0e37c7-f412-4ffe-8333-5d9b426be152",
+  "fields": {
+    "id_poliza": "ab868ded-7b3d-4234-b01c-4b27cd002e4c",
+    "amount": "58000.00",
+    "due_date": "2026-11-17",
+    "paid_at": "2026-11-17T16:57:44.400Z",
+    "method": "pse",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "9f64a2ec-e0da-4eb7-9674-34bc9b94f28b",
+  "fields": {
+    "id_poliza": "e545ffdc-9cd1-40a9-b0c8-fdbce4cf28d2",
+    "amount": "210000.00",
+    "due_date": "2026-11-17",
+    "paid_at": "2026-11-17T17:18:27.492Z",
+    "method": "tarjeta",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "cbf8d5ad-5604-4b9b-a024-8290292ff7cf",
+  "fields": {
+    "id_poliza": "bec27b8c-598c-4989-8060-5ac15e14a215",
+    "amount": "210000.00",
+    "due_date": "2026-11-17",
+    "paid_at": "2026-11-17T17:16:42.047Z",
+    "method": "tarjeta",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "e89afe6e-6e68-4f2d-b9e8-8246aefc1453",
+  "fields": {
+    "id_poliza": "a33fc5a2-336a-483f-bde5-c482a1618e19",
+    "amount": "210000.00",
+    "due_date": "2026-11-10",
+    "paid_at": "2026-11-10T22:29:25.965Z",
+    "method": "pse",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.premiumpayment",
+  "pk": "f48ea334-03be-4432-9f28-cbe97db9ffcf",
+  "fields": {
+    "id_poliza": "38d4dbc7-243f-466f-bbe1-a5d866eab3e5",
+    "amount": "1200000.00",
+    "due_date": "2026-10-06",
+    "paid_at": "2026-10-06T16:53:57.822Z",
+    "method": "pse",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.claimpayout",
+  "pk": "47f8b822-6296-497c-9b00-ba1b02dd0b12",
+  "fields": {
+    "id_siniestro": "d5e56d78-cd6f-4242-9c43-96c67c65b85f",
+    "amount": "3500000.00",
+    "paid_at": "2026-10-13T18:54:27.098Z",
+    "method": "transferencia",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.claimpayout",
+  "pk": "61ea652c-0468-4692-9ca0-9e47337b9bcf",
+  "fields": {
+    "id_siniestro": "2baff5aa-9343-41e1-acb2-cc6fb6ff00a9",
+    "amount": "3500000.00",
+    "paid_at": "2026-11-17T16:57:45.201Z",
+    "method": "transferencia",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.claimpayout",
+  "pk": "a9ca6ab7-8c56-4bc8-af18-84eb564e1a28",
+  "fields": {
+    "id_siniestro": "a64199f0-434f-4a63-ad7b-dd513b4233e7",
+    "amount": "4200000.00",
+    "paid_at": "2026-11-17T17:17:19.457Z",
+    "method": "transferencia",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.claimpayout",
+  "pk": "bae91b11-f3e4-4c61-b2a2-c1a775b6e354",
+  "fields": {
+    "id_siniestro": "7f647c80-746c-4cff-9af7-4a994b6729de",
+    "amount": "4200000.00",
+    "paid_at": "2026-11-17T17:19:07.602Z",
+    "method": "transferencia",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.claimpayout",
+  "pk": "d8f280c0-cd03-4377-afdc-4abb2da20fd4",
+  "fields": {
+    "id_siniestro": "4a1977af-5bc5-408d-8f8e-272e58f39292",
+    "amount": "4500000.00",
+    "paid_at": "2026-10-06T16:54:01.306Z",
+    "method": "transferencia",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.claimpayout",
+  "pk": "e2548103-c999-4370-9b49-bca3ed2e9904",
+  "fields": {
+    "id_siniestro": "df64f2b9-88de-41c3-a181-c6f430740f93",
+    "amount": "3500000.00",
+    "paid_at": "2026-11-10T20:01:37.891Z",
+    "method": "transferencia",
+    "status": "pagado"
+  }
+},
+{
+  "model": "pagos.claimpayout",
+  "pk": "f70191e9-92f8-4835-8453-f9b3c653ff0f",
+  "fields": {
+    "id_siniestro": "ece2df0e-cd37-43c1-93d3-d7655bf77eef",
+    "amount": "3500000.00",
+    "paid_at": "2026-11-10T19:56:58.115Z",
+    "method": "transferencia",
+    "status": "pagado"
+  }
+}
+]
